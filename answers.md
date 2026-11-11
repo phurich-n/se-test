@@ -169,8 +169,9 @@ function sumRecursive(n?: TreeNode): number {
 function sumIterative(start: TreeNode): number {
   let total = 0;
   const queue: TreeNode[] = [start];
-  while (queue.length > 0) {
-    const current = queue.shift()!;
+  let head = 0; // ชี้หัวคิว แทน queue.shift() ที่ต้องเลื่อนสมาชิกทุกตัว (O(n) ต่อครั้ง)
+  while (head < queue.length) {
+    const current = queue[head++];
     if (typeof current.value === "number") total += current.value;
     if (current.left) queue.push(current.left);
     if (current.right) queue.push(current.right);
@@ -271,7 +272,7 @@ erDiagram
 - **1NF** — ทุกช่องเก็บค่าเดียว แยก "ที่อยู่" เป็นบ้านเลขที่ / ถนน / ตำบล / อำเภอ / จังหวัด / รหัสไปรษณีย์ และแยกเป็นตาราง `customer_addresses` เพราะลูกค้า 1 รายมีได้หลายที่อยู่ ไม่ต้องมีคอลัมน์ address1, address2 ซ้ำๆ
 - **2NF** — ทุกตารางใช้ primary key คอลัมน์เดียว ทุกคอลัมน์จึงขึ้นกับ key ทั้งหมด ไม่มี partial dependency
 - **3NF** — คำนำหน้า เพศ ขนาด และเกรด แยกเป็น lookup table ไม่เก็บคำอธิบายซ้ำทุกแถวลูกค้า (ไม่มี transitive dependency) และแก้ได้ในที่เดียว
-- **ลูกค้าหลัก–ลูกค้าย่อย** — ใช้ self-referencing foreign key `parent_customer_id` ชี้กลับไปที่ `customers.customer_id` ของตารางเดียวกัน ถ้าเป็น NULL คือลูกค้าหลัก ลูกค้าหลัก 1 รายมีลูกค้าย่อยได้หลายราย (1 : N) และมี CHECK กันไม่ให้ลูกค้าเป็น parent ของตัวเอง
+- **ลูกค้าหลัก–ลูกค้าย่อย** — ใช้ self-referencing foreign key `parent_customer_id` ชี้กลับไปที่ `customers.customer_id` ของตารางเดียวกัน ถ้าเป็น NULL คือลูกค้าหลัก ลูกค้าหลัก 1 รายมีลูกค้าย่อยได้หลายราย (1 : N) มี CHECK กันไม่ให้ลูกค้าเป็น parent ของตัวเอง และมี trigger กันวงวนหลายชั้น (เช่น A เป็นลูกของ B และ B เป็นลูกของ A) เพราะถ้าเกิดวงจะไม่มีลูกค้าหลัก และ query ที่ไล่ลำดับชั้นจะวนไม่จบ
 - `customer_code` และ `national_id` เป็น UNIQUE และใช้ `customer_id` เป็น surrogate key เพื่อให้เปลี่ยนรหัสทางธุรกิจได้โดยไม่กระทบ foreign key
 - `national_id` เป็นข้อมูลส่วนบุคคลตาม PDPA ควรเข้ารหัสและจำกัดสิทธิ์การเข้าถึง
 
@@ -326,6 +327,27 @@ CREATE TABLE customer_addresses (     -- ที่อยู่ (1 ลูกค�
 );
 
 CREATE INDEX idx_customers_parent ON customers(parent_customer_id);
+
+-- กันวงวนของลูกค้าหลัก–ลูกค้าย่อย (เช่น A เป็นลูกของ B และ B เป็นลูกของ A)
+-- CHECK ด้านบนกันได้แค่ A → A จึงใช้ trigger ไล่ขึ้นไปตาม parent ทีละชั้น
+-- ถ้าเจอตัวเองระหว่างทาง แปลว่าจะเกิดวง ให้ยกเลิกการแก้ไข
+-- (ตอน INSERT เกิดวงไม่ได้ เพราะยังไม่มีแถวไหนชี้มาที่ลูกค้าใหม่)
+CREATE TRIGGER trg_customers_no_parent_cycle
+BEFORE UPDATE OF parent_customer_id ON customers
+WHEN NEW.parent_customer_id IS NOT NULL
+BEGIN
+  SELECT RAISE(ABORT, 'parent_customer_id ทำให้เกิดวงวนของลูกค้าหลัก–ลูกค้าย่อย')
+  WHERE EXISTS (
+    WITH RECURSIVE ancestors(id) AS (
+      SELECT NEW.parent_customer_id
+      UNION
+      SELECT c.parent_customer_id
+      FROM customers c JOIN ancestors a ON c.customer_id = a.id
+      WHERE c.parent_customer_id IS NOT NULL
+    )
+    SELECT 1 FROM ancestors WHERE id = NEW.customer_id
+  );
+END;
 ```
 
 ไฟล์ฐานข้อมูลจริง: [`db/customers.db`](https://github.com/phurich-n/se-test/blob/HEAD/db/customers.db) (SQLite)

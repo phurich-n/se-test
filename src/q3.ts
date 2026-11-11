@@ -8,7 +8,9 @@
 //     i := i / 2;
 //   end;
 
-function run(n: number): number {
+import { isMain } from "./is_main.js";
+
+export function run(n: number): number {
   let i = n;
   let r = 0;
 
@@ -21,8 +23,10 @@ function run(n: number): number {
   return r;
 }
 
-const n = 256;
-const r = run(n);
+if (isMain(import.meta.url)) {
+  const n = 256;
+  const r = run(n);
 
-console.log(`r = ${r}`);
-console.log(`check ด้วยสูตร: n * (log2(n) + 1) = ${n} * ${Math.log2(n) + 1} = ${n * (Math.log2(n) + 1)}`);
+  console.log(`r = ${r}`);
+  console.log(`check ด้วยสูตร: n * (log2(n) + 1) = ${n} * ${Math.log2(n) + 1} = ${n * (Math.log2(n) + 1)}`);
+}

@@ -33,6 +33,7 @@ npm install
 | `npm run q4` | รันข้อ 4 (ทั้งแบบ recursion และ queue) |
 | `npm run q5` | รันข้อ 5–6: สร้างตารางใน memory ใส่ข้อมูลตัวอย่าง แล้วรัน query ข้อ 6 |
 | `npm run db` | สร้างไฟล์ฐานข้อมูล SQLite จริงที่ `db/customers.db` |
+| `npm test` | รัน unit test ทุกข้อ (`test/`) |
 | `npm run typecheck` | ตรวจ type ทั้งโปรเจกต์ |
 
 ไม่อยากติดตั้งอะไร: เปิดใน [StackBlitz](https://stackblitz.com/github/phurich-n/se-test) หรือ [GitHub Codespaces](https://codespaces.new/phurich-n/se-test) แล้วพิมพ์คำสั่งข้างบนใน terminal ได้เลย

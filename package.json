@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "tsx --test \"test/*.test.ts\"",
     "q2": "tsx src/q2.ts",
     "q3": "tsx src/q3.ts",
     "q4": "tsx src/q4.ts",

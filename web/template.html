@@ -310,8 +310,9 @@ r := 0;
       <div><div class="label">แบบ Iterative (BFS)</div>
 <pre><span class="k">let</span> total = 0;
 <span class="k">const</span> queue = [root];
-<span class="k">while</span> (queue.length) {
-  <span class="k">const</span> cur = queue.shift()!; <span class="c">// หยิบตัวหน้าสุดออก</span>
+<span class="k">let</span> head = 0; <span class="c">// ชี้หัวคิว (ไม่ใช้ shift ที่เป็น O(n))</span>
+<span class="k">while</span> (head &lt; queue.length) {
+  <span class="k">const</span> cur = queue[head++]; <span class="c">// หยิบตัวหน้าสุดออก</span>
   <span class="k">if</span> (<span class="k">typeof</span> cur.value === <span class="k">"number"</span>)
     total += cur.value;
   <span class="k">if</span> (cur.left) queue.push(cur.left); <span class="c">// ใส่ตัวลูกต่อท้ายคิว</span>
@@ -332,7 +333,7 @@ r := 0;
       <div><b>2NF</b>ทุกตารางใช้ primary key คอลัมน์เดียว ทุกคอลัมน์จึงขึ้นกับ key ทั้งหมด ไม่มี partial dependency</div>
       <div><b>3NF</b>คำนำหน้า เพศ ขนาด เกรด แยกเป็น lookup table ไม่เก็บคำอธิบายซ้ำทุกแถว และแก้ได้ในที่เดียว</div>
     </div>
-    <div class="callout"><b>ลูกค้าหลัก–ลูกค้าย่อย</b> ใช้ self-referencing foreign key <code>parent_customer_id</code> ชี้กลับไปที่ <code>customers.customer_id</code> · ค่า NULL = ลูกค้าหลัก · มี CHECK กันไม่ให้ลูกค้าเป็น parent ของตัวเอง · <code>national_id</code> เป็นข้อมูลส่วนบุคคลตาม PDPA ควรเข้ารหัสและจำกัดสิทธิ์การเข้าถึง</div>
+    <div class="callout"><b>ลูกค้าหลัก–ลูกค้าย่อย</b> ใช้ self-referencing foreign key <code>parent_customer_id</code> ชี้กลับไปที่ <code>customers.customer_id</code> · ค่า NULL = ลูกค้าหลัก · มี CHECK กันไม่ให้ลูกค้าเป็น parent ของตัวเอง และ trigger กันวงวนหลายชั้น · <code>national_id</code> เป็นข้อมูลส่วนบุคคลตาม PDPA ควรเข้ารหัสและจำกัดสิทธิ์การเข้าถึง</div>
   </section>
 
   <!-- ข้อ 6 -->

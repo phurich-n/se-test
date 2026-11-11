@@ -50,3 +50,24 @@ CREATE TABLE customer_addresses (     -- ที่อยู่ (แยกเป�
 );
 
 CREATE INDEX idx_customers_parent ON customers(parent_customer_id);
+
+-- กันวงวนของลูกค้าหลัก–ลูกค้าย่อย (เช่น A เป็นลูกของ B และ B เป็นลูกของ A)
+-- CHECK ด้านบนกันได้แค่ A → A จึงใช้ trigger ไล่ขึ้นไปตาม parent ทีละชั้น
+-- ถ้าเจอตัวเองระหว่างทาง แปลว่าจะเกิดวง ให้ยกเลิกการแก้ไข
+-- (ตอน INSERT เกิดวงไม่ได้ เพราะยังไม่มีแถวไหนชี้มาที่ลูกค้าใหม่)
+CREATE TRIGGER trg_customers_no_parent_cycle
+BEFORE UPDATE OF parent_customer_id ON customers
+WHEN NEW.parent_customer_id IS NOT NULL
+BEGIN
+  SELECT RAISE(ABORT, 'parent_customer_id ทำให้เกิดวงวนของลูกค้าหลัก–ลูกค้าย่อย')
+  WHERE EXISTS (
+    WITH RECURSIVE ancestors(id) AS (
+      SELECT NEW.parent_customer_id
+      UNION
+      SELECT c.parent_customer_id
+      FROM customers c JOIN ancestors a ON c.customer_id = a.id
+      WHERE c.parent_customer_id IS NOT NULL
+    )
+    SELECT 1 FROM ancestors WHERE id = NEW.customer_id
+  );
+END;
