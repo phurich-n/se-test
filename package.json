@@ -1,0 +1,35 @@
+{
+  "name": "se-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "q2": "tsx src/q2.ts",
+    "q3": "tsx src/q3.ts",
+    "q4": "tsx src/q4.ts",
+    "q5": "tsx src/q5_q6.ts",
+    "db": "tsx src/create_db.ts",
+    "typecheck": "tsc -p .",
+    "build:web": "node web/build.mjs",
+    "build:pdf": "node scripts/build-pdf.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/sql.js": "^1.4.11",
+    "esbuild": "^0.28.2",
+    "highlight.js": "11.11.1",
+    "marked": "15.0.12",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  },
+  "type": "module",
+  "dependencies": {
+    "sql.js": "^1.16.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Software Engineer Assessment — คำตอบ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* โทน "กระดาษกราฟวิศวกรรม": พื้นเทาฟ้าเย็น + เส้นตาราง 24px, หมึกน้ำเงินเข้ม, เน้นด้วยสีอำพัน (สีคู่ตรงข้าม) */
+    --ink: #141a22; --muted: #556070; --line: #d9e0e8; --paper: #edf1f5; --card: #ffffff;
+    --grid: rgba(60, 90, 130, .07);
+    --rule: #c6cfd9; --rule-strong: #8794a3; --skip: #a9b3bf; --skip-fill: #eef2f6;
+    /* --accent ใช้กับเส้น/พื้น · --accent-ink ใช้กับตัวอักษร (contrast ≥ 5:1 บนพื้นขาว พื้นเทาฟ้า และ accent-soft) */
+    --accent: #d98a00; --accent-ink: #965400; --accent-soft: #fff3da; --accent-line: #f3dcae;
+    --ok: #1f7a4d; --ok-soft: #e3f4ea; --err: #b42318;
+    --code-bg: #141a22; --code-ink: #e9eef4; --code-comment: #93a0ae; --code-scroll: #3a4554;
+    /* ตัวอักษร: IBM Plex ทั้งตระกูล (Sans Thai + Mono) — ตัวไทยในบริบท mono จะ fallback ไป Plex Sans Thai ให้กลมกลืน */
+    --sans: "IBM Plex Sans Thai", "Noto Sans Thai", "Leelawadee UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", "IBM Plex Sans Thai", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --fs-display: clamp(30px, 4.6vw, 44px); --fs-title: 22px; --fs-body: 16px;
+    --fs-secondary: 15px; --fs-meta: 14px; --fs-label: 12.5px; --fs-code: 14px;
+    --nav-h: 52px;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 16px); }
+  body { margin: 0; color: var(--ink); background-color: var(--paper);
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 24px 24px; background-position: center top;
+    font: var(--fs-body)/1.7 var(--sans); font-variant-numeric: tabular-nums; }
+  p, ol.steps span, .callout, .nf div { text-wrap: pretty; }
+  main { max-width: 980px; margin: 0 auto; padding: 0 20px 80px; }
+  a { color: inherit; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+  ::selection { background: #ffe1a1; color: var(--ink); }
+  pre ::selection, pre::selection, textarea#sql::selection { background: #6b4a12; color: #fff; }
+  :focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+  input, textarea { caret-color: var(--accent); }
+  code { font-family: var(--mono); font-size: .9em; }
+
+  /* ---------- แถบนำทางข้อ 1–6 ---------- */
+  .qnav { position: sticky; top: 0; z-index: 10; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .qnav-in { max-width: 980px; height: var(--nav-h); margin: 0 auto; padding: 0 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .qnav-home { font-weight: 600; font-size: var(--fs-secondary); text-decoration: none; white-space: nowrap; }
+  .qnav ol { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; }
+  .qnav-label { font-size: var(--fs-meta); color: var(--muted); margin-right: 4px; }
+  .qnav ol a { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px;
+    font: 600 var(--fs-secondary) var(--sans); text-decoration: none; color: var(--muted); transition: background .2s, color .2s; }
+  .qnav ol a:hover { background: var(--accent-soft); color: var(--accent-ink); }
+  .qnav ol a[aria-current="true"] { background: var(--ink); color: #fff; }
+  @media (max-width: 440px) { .qnav-home { display: none; } .qnav-in { justify-content: center; } }
+
+  header.hero { padding: 48px 0 28px; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+  h1 { font-size: var(--fs-display); font-weight: 700; line-height: 1.25; letter-spacing: -.01em; margin: 0 0 14px; text-wrap: balance; }
+  .sub { color: var(--muted); margin: 0 0 22px; }
+  .sub .org { display: block; color: var(--ink); font-weight: 500; }
+  .nb { white-space: nowrap; }
+  .links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--line);
+    border-radius: 999px; background: var(--card); font-size: var(--fs-meta); text-decoration: none; transition: border-color .2s; }
+  .chip:hover { border-color: var(--accent); }
+
+  .summary { width: 100%; border-collapse: collapse; margin: 28px 0 8px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .summary td { padding: 10px 14px; border-top: 1px solid var(--line); vertical-align: top; }
+  .summary tr:first-child td { border-top: 0; }
+  .summary td:first-child { width: 64px; font-weight: 600; color: var(--muted); white-space: nowrap; }
+  .summary td:nth-child(2) a { text-decoration: none; }
+  .summary td:nth-child(2) a:hover { text-decoration: underline; }
+  .summary .ans { font-family: var(--mono); font-weight: 600; white-space: nowrap; text-align: right; }
+
+  section.q { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 28px; margin-top: 28px; }
+  .qhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 6px; }
+  .qhead + .grid2 { margin-top: 18px; }
+  .qnum { font: 600 var(--fs-meta)/1.6 var(--sans); color: var(--accent-ink); background: var(--accent-soft); padding: 2px 10px; border-radius: 6px; white-space: nowrap; }
+  h2 { font-size: var(--fs-title); font-weight: 600; margin: 0; line-height: 1.4; flex: 1 1 280px; text-wrap: balance; }
+  /* คำตอบสรุปของแต่ละข้อ อยู่ที่หัวข้อเลย ไม่ต้องเลื่อนไปหาท้าย section */
+  .qans { margin-left: auto; display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap;
+    font: 600 var(--fs-secondary) var(--mono); border: 1px solid var(--line); border-radius: 8px; padding: 3px 12px; }
+  .qans small { font: 500 13px var(--sans); color: var(--muted); }
+  .prompt { color: var(--muted); margin: 4px 0 18px; max-width: 72ch; }
+  h3 { font-size: var(--fs-secondary); margin: 22px 0 8px; color: var(--muted); font-weight: 600; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid2 > * { min-width: 0; } /* ให้ <pre> เลื่อนในกล่องตัวเอง แทนการดันหน้าให้กว้างขึ้น */
+  @media (max-width: 760px) {
+    .grid2 { grid-template-columns: 1fr; }
+    section.q { padding: 20px; }
+    .qans { margin-left: 0; }
+  }
+
+  pre { margin: 0; padding: 14px 16px; background: var(--code-bg); color: var(--code-ink); border-radius: 10px; overflow-x: auto;
+    font: var(--fs-code)/1.65 var(--mono); scrollbar-color: var(--code-scroll) var(--code-bg); }
+  pre .c { color: var(--code-comment); } pre .k { color: #ffbf4d; }
+  .label { font: 600 var(--fs-label) var(--mono); color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .06em; }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 18px 0 12px; }
+  button { font: inherit; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; min-height: 40px;
+    padding: 7px 18px; border-radius: 10px; border: 1px solid var(--ink);
+    background: var(--ink); color: #fff; cursor: pointer; transition: transform .1s, opacity .2s, background .2s; }
+  button .i { width: 12px; height: 12px; fill: currentColor; flex: none; }
+  button.ghost { background: var(--card); color: var(--ink); }
+  button.ghost:hover:not(:disabled) { background: var(--paper); }
+  button:hover:not(:disabled) { transform: translateY(-1px); }
+  button:active:not(:disabled) { transform: translateY(0); }
+  button:disabled { opacity: .45; cursor: default; }
+  input[type=number] { font: 600 var(--fs-secondary) var(--mono); width: 120px; min-height: 40px; padding: 7px 10px;
+    border: 1px solid var(--rule-strong); border-radius: 10px; background: var(--card); color: var(--ink); }
+  input[aria-invalid="true"] { border-color: var(--err); }
+
+  .result { font: 600 20px var(--mono); color: var(--ok); background: var(--ok-soft); padding: 4px 14px; border-radius: 8px; }
+  .result:empty { display: none; }
+  .note { font-size: var(--fs-meta); color: var(--muted); }
+  .note.err { color: var(--err); }
+  .callout { background: var(--accent-soft); border: 1px solid var(--accent-line); padding: 12px 16px; border-radius: 10px;
+    font-size: var(--fs-secondary); margin-top: 16px; }
+  .callout code { background: rgba(255, 255, 255, .7); padding: 0 4px; border-radius: 4px; }
+
+  table.trace, #sql-out table { width: 100%; border-collapse: collapse; font: var(--fs-meta) var(--mono); }
+  table.trace th, table.trace td, #sql-out th, #sql-out td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+  table.trace th, #sql-out th { color: var(--muted); font-weight: 600; font-size: var(--fs-label); }
+  table.trace tr.empty td { color: var(--muted); font: var(--fs-meta) var(--sans); padding: 14px 10px;
+    text-align: center; border-bottom: 1px dashed var(--line); }
+  .table-wrap { overflow-x: auto; min-height: 40px; scrollbar-color: var(--line) transparent; }
+  tr.appear { animation: appear .35s cubic-bezier(.16, 1, .3, 1); }
+  @keyframes appear { from { opacity: 0; transform: translateY(-4px); background: var(--accent-soft); } to { opacity: 1; } }
+
+  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  ol.steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; }
+  ol.steps li::before { content: counter(s); font: 600 var(--fs-meta) var(--sans); width: 30px; height: 30px; border-radius: 50%;
+    display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-ink); }
+  ol.steps b { display: block; }
+  ol.steps span { color: var(--muted); font-size: var(--fs-secondary); }
+
+  #q4-tree { width: 100%; max-width: 720px; display: block; margin: 0 auto; }
+  .edges line { stroke: var(--rule); stroke-width: 2; }
+  .tnode circle { fill: #fff; stroke: var(--ink); stroke-width: 2; transition: fill .25s, stroke .25s; }
+  .tnode text { font: 600 17px var(--mono); fill: var(--ink); }
+  /* node ที่ไม่นับ: ความหมายอยู่ที่เส้นประ ส่วนตัวอักษรยังอ่านออก */
+  .tnode.skip circle { stroke-dasharray: 4 3; stroke: var(--skip); } .tnode.skip text { fill: var(--muted); }
+  .tnode.active circle { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 4; }
+  .tnode.visited.skip circle { fill: var(--skip-fill); }
+  .tnode.counted circle { fill: var(--ok-soft); stroke: var(--ok); }
+  .tnode.counted text { fill: var(--ok); }
+  .seq { font: var(--fs-meta)/1.6 var(--mono); color: var(--muted); min-height: 22px; }
+
+  .er-wrap { overflow-x: auto; scrollbar-color: var(--line) transparent; }
+  #er { width: 100%; min-width: 700px; display: block; }
+  .er-hint { display: none; margin: 6px 0 0; }
+  @media (max-width: 760px) { .er-hint { display: block; } }
+  .er-frame { fill: #fff; stroke: var(--rule); stroke-width: 1.5; }
+  .er-head { fill: var(--ink); }
+  .er-title { fill: #fff; font: 600 14px var(--mono); }
+  .er-field { font: 13px var(--mono); fill: var(--ink); } .er-field.pk { font-weight: 600; text-decoration: underline; }
+  .er-key { font: 600 11px var(--mono); fill: var(--muted); } .k-PK { fill: var(--accent-ink); } .k-FK { fill: #2b6cb0; }
+  .er-links path { fill: none; stroke: var(--rule-strong); stroke-width: 1.6; }
+  .er-links path.self { stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 4; }
+  .card { font: 600 12px var(--mono); fill: var(--muted); }
+  .self-label { fill: var(--accent-ink); }
+  .nf { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+  .nf div { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: var(--fs-secondary); }
+  .nf b { display: block; font-weight: 700; color: var(--accent-ink); }
+  @media (max-width: 760px) { .nf { grid-template-columns: 1fr; } }
+
+  textarea#sql { display: block; width: 100%; min-height: 390px; resize: vertical; padding: 14px 16px; border-radius: 10px; border: 0;
+    background: var(--code-bg); color: var(--code-ink); font: var(--fs-code)/1.65 var(--mono);
+    white-space: pre; overflow: auto; scrollbar-color: var(--code-scroll) var(--code-bg); }
+  textarea#sql:focus-visible { outline-offset: 3px; }
+  @media (max-width: 760px) { textarea#sql { min-height: 320px; font-size: 13px; } }
+  #sql-status { font-size: var(--fs-meta); color: var(--muted); } #sql-status.err { color: var(--err); }
+  footer { text-align: center; color: var(--muted); font-size: var(--fs-meta); margin-top: 48px; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<nav class="qnav" aria-label="ไปยังข้อ">
+  <div class="qnav-in">
+    <a class="qnav-home" href="#top">คำตอบแบบทดสอบ</a>
+    <ol>
+      <li aria-hidden="true"><span class="qnav-label">ข้อ</span></li>
+      <li><a href="#q1" aria-label="ข้อ 1">1</a></li>
+      <li><a href="#q2" aria-label="ข้อ 2">2</a></li>
+      <li><a href="#q3" aria-label="ข้อ 3">3</a></li>
+      <li><a href="#q4" aria-label="ข้อ 4">4</a></li>
+      <li><a href="#q5" aria-label="ข้อ 5">5</a></li>
+      <li><a href="#q6" aria-label="ข้อ 6">6</a></li>
+    </ol>
+  </div>
+</nav>
+<main id="top">
+  <header class="hero">
+    <h1>คำตอบแบบทดสอบ</h1>
+    <p class="sub"><span class="org">Software Engineer Assessment · <span class="nb">บริษัท เซาท์แลนด์รับเบอร์ จำกัด</span></span>
+      โดย <span class="nb">Phurich Nilvisut</span> · เขียนด้วย TypeScript</p>
+    <div class="links">
+      <a class="chip" href="https://github.com/phurich-n/se-test">GitHub: ซอร์สโค้ดทั้งหมด</a>
+    </div>
+
+    <table class="summary">
+      <tr><td>ข้อ 1</td><td><a href="#q1">ขั้นตอนตรวจสอบเมื่อระบบใช้งานไม่ได้</a></td><td class="ans">7 ขั้นตอน</td></tr>
+      <tr><td>ข้อ 2</td><td><a href="#q2">ค่าของ i หลังจบ loop</a></td><td class="ans">i = 5</td></tr>
+      <tr><td>ข้อ 3</td><td><a href="#q3">ค่าของ r เมื่อ n = 256</a></td><td class="ans">r = 2,304</td></tr>
+      <tr><td>ข้อ 4</td><td><a href="#q4">ผลรวมตัวเลขใน tree</a></td><td class="ans">40</td></tr>
+      <tr><td>ข้อ 5</td><td><a href="#q5">ER Diagram + Normalization</a></td><td class="ans">6 ตาราง</td></tr>
+      <tr><td>ข้อ 6</td><td><a href="#q6">Query ลูกค้าย่อย + ลูกค้าหลัก</a></td><td class="ans">ใช้ SELF JOIN</td></tr>
+    </table>
+  </header>
+
+  <!-- ข้อ 1 -->
+  <section class="q" id="q1">
+    <div class="qhead"><span class="qnum">ข้อ 1</span><h2>ระบบใช้งานไม่ได้ ตรวจสอบเบื้องต้นอย่างไร</h2><span class="qans"><small>คำตอบ</small>7 ขั้นตอน</span></div>
+    <p class="prompt">เริ่มจากฝั่งผู้ใช้ก่อน แล้วค่อยๆ ไล่เข้าไปหาเซิร์ฟเวอร์ ดูภาพรวมก่อนแล้วค่อยเจาะทีละจุด</p>
+    <ol class="steps">
+      <li><div><b>ลองทำให้เจอปัญหาเองก่อน</b><span>ถามให้ชัดว่าใครเจอ เจอกี่คน เจอหน้าไหน กดอะไรแล้วพัง ขึ้น error ว่าอะไร เริ่มเป็นตั้งแต่เมื่อไหร่ แล้วเป็นทุกเครื่องหรือบางเครื่อง</span></div></li>
+      <li><div><b>เช็กว่าช่วงนี้มีอะไรเปลี่ยนไปบ้าง</b><span>ปัญหาส่วนใหญ่มาจากของที่เพิ่งเปลี่ยน เช่น เพิ่ง deploy เวอร์ชันใหม่ แก้ config อัปเดต library หรือ SSL กับโดเมนหมดอายุ ถ้าเจอว่าเพิ่ง deploy แล้วพังทันที ให้ rollback กลับไปก่อน ระบบจะได้กลับมาใช้ได้</span></div></li>
+      <li><div><b>ดูที่ฝั่งผู้ใช้ (browser)</b><span>กด F12 เปิด devtools แท็บ console ดูว่ามี javascript error ไหม แท็บ Network ดูว่า request ไหนได้ 4xx หรือ 5xx ลองล้าง cache หรือเปิดด้วย browser อื่นดู</span></div></li>
+      <li><div><b>ดูเรื่องเน็ตและการเชื่อมต่อ</b><span>ping ถึงเซิร์ฟเวอร์ไหม ชื่อโดเมนชี้ถูกที่หรือเปล่า (nslookup) SSL ยังไม่หมดอายุใช่ไหม firewall หรือ port ถูกปิดอยู่หรือเปล่า</span></div></li>
+      <li><div><b>ดูที่เซิร์ฟเวอร์และตัวแอป</b><span>service ยังรันอยู่ไหม เปิด log ของแอปกับ web server ดูว่ามี error อะไร แล้วเช็กว่า CPU, RAM หรือ disk เต็มหรือเปล่า</span></div></li>
+      <li><div><b>ดูฐานข้อมูลและระบบอื่นที่แอปต้องพึ่ง</b><span>ต่อ database ได้ไหม connection เต็มหรือยัง มี query ที่ช้าหรือติด lock ไหม แล้ว API ภายนอกที่เรียกใช้ล่มอยู่หรือเปล่า</span></div></li>
+      <li><div><b>แก้ให้ตรงจุด แล้วกันไม่ให้เกิดซ้ำ</b><span>หาสาเหตุจริงให้เจอ (root cause) ไม่ใช่แค่อาการ แก้แล้วลองซ้ำให้แน่ใจว่าหาย แจ้งผู้ใช้ว่ากลับมาใช้ได้แล้ว แล้วเพิ่ม monitoring หรือ test เพื่อให้รู้ตัวก่อนถ้าเกิดอีก</span></div></li>
+    </ol>
+  </section>
+
+  <!-- ข้อ 2 -->
+  <section class="q" id="q2">
+    <div class="qhead"><span class="qnum">ข้อ 2</span><h2>หลังจบการทำงาน ค่าของ i เป็นเท่าใด</h2><span class="qans"><small>คำตอบ</small>i = 5</span></div>
+    <div class="grid2">
+      <div><div class="label">โจทย์ (pseudocode)</div>
+<pre>x := 1;
+i := 1;
+<span class="k">while</span> (x &lt;= 1000)
+<span class="k">begin</span>
+  x := 2^x;
+  i := i + 1;
+<span class="k">end</span>;</pre></div>
+      <div><div class="label">TypeScript</div>
+<pre><span class="k">let</span> x = 1;
+<span class="k">let</span> i = 1;
+<span class="k">while</span> (x &lt;= 1000) {
+  x = 2 ** x;
+  i = i + 1;
+}</pre></div>
+    </div>
+    <div class="controls"><button id="q2-run"><svg class="i" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.6v8.8a.6.6 0 0 0 .92.5l7-4.4a.6.6 0 0 0 0-1l-7-4.4a.6.6 0 0 0-.92.5z"/></svg>Run</button><span class="result" id="q2-out" aria-live="polite"></span></div>
+    <div class="table-wrap"><table class="trace"><thead><tr><th>รอบ</th><th>x ก่อน</th><th>x = 2^x</th><th>i</th><th>x ≤ 1000?</th></tr></thead><tbody id="q2-body"><tr class="empty"><td colspan="5">กด Run เพื่อดูค่า x และ i ทีละรอบ</td></tr></tbody></table></div>
+    <div class="callout">x เพิ่มขึ้นแบบ 2 ยกกำลังซ้อน (1 → 2 → 4 → 16 → 65,536) จึงวนแค่ 4 รอบ ได้ <b>i = 5</b>
+  </section>
+
+  <!-- ข้อ 3 -->
+  <section class="q" id="q3">
+    <div class="qhead"><span class="qnum">ข้อ 3</span><h2>ถ้า n = 256 หลังจบการทำงาน r มีค่าเท่าใด</h2><span class="qans"><small>คำตอบ</small>r = 2,304</span></div>
+    <div class="grid2">
+      <div><div class="label">โจทย์ (pseudocode)</div>
+<pre>i := n;
+r := 0;
+<span class="k">while</span> (i &gt;= 1) <span class="k">do</span>
+<span class="k">begin</span>
+  <span class="k">for</span> j := 1 <span class="k">to</span> n <span class="k">do</span>
+    r := r + 1;
+  i := i / 2;
+<span class="k">end</span>;</pre></div>
+      <div><div class="label">TypeScript</div>
+<pre><span class="k">let</span> i = n;
+<span class="k">let</span> r = 0;
+<span class="k">while</span> (i &gt;= 1) {
+  <span class="k">for</span> (<span class="k">let</span> j = 1; j &lt;= n; j++) {
+    r = r + 1;
+  }
+  i = i / 2;
+}</pre></div>
+    </div>
+    <div class="controls">
+      <label for="q3-n">n =</label><input id="q3-n" type="number" value="256" min="1" max="1000000" aria-describedby="q3-check">
+      <button id="q3-run"><svg class="i" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.6v8.8a.6.6 0 0 0 .92.5l7-4.4a.6.6 0 0 0 0-1l-7-4.4a.6.6 0 0 0-.92.5z"/></svg>Run</button><span class="result" id="q3-out" aria-live="polite"></span>
+    </div>
+    <div class="note" id="q3-check" aria-live="polite"></div>
+    <div class="table-wrap"><table class="trace"><thead><tr><th>รอบ</th><th>i</th><th>loop ใน</th><th>r สะสม</th></tr></thead><tbody id="q3-body"><tr class="empty"><td colspan="4">กด Run เพื่อดูค่า i และ r ทีละรอบ</td></tr></tbody></table></div>
+    <div class="callout">
+      loop นอกหาร i ครึ่งทุกรอบ ได้ ⌊log₂256⌋ + 1 = 9 รอบ แต่ละรอบ loop ในบวก r เพิ่ม 256 → <b>r = 256 × 9 = 2,304</b>
+      · Time complexity <b>O(n log n)</b><br>
+    </div>
+  </section>
+
+  <!-- ข้อ 4 -->
+  <section class="q" id="q4">
+    <div class="qhead"><span class="qnum">ข้อ 4</span><h2>หาผลรวมของตัวเลขใน Tree</h2><span class="qans"><small>คำตอบ</small>40</span></div>
+    <p class="prompt">บาง node เป็นตัวอักษร (D, F) และมี node ว่าง 1 ตัว จึงบวกเฉพาะค่าที่เป็นตัวเลข (เส้นประ = ไม่นับ)</p>
+    <svg id="q4-tree" role="img" aria-label="Binary tree ของข้อ 4"></svg>
+    <div class="controls">
+      <button id="q4-dfs"><svg class="i" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.6v8.8a.6.6 0 0 0 .92.5l7-4.4a.6.6 0 0 0 0-1l-7-4.4a.6.6 0 0 0-.92.5z"/></svg>DFS (recursion)</button>
+      <button id="q4-bfs" class="ghost"><svg class="i" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.6v8.8a.6.6 0 0 0 .92.5l7-4.4a.6.6 0 0 0 0-1l-7-4.4a.6.6 0 0 0-.92.5z"/></svg>BFS (queue)</button>
+      <span class="result" id="q4-out" aria-live="polite"></span>
+    </div>
+    <div class="seq" id="q4-seq">กด DFS หรือ BFS เพื่อดูลำดับการเดินแต่ละ node</div>
+    <div class="grid2" style="margin-top:14px">
+      <div><div class="label">แบบ Recursive (DFS)</div>
+<pre><span class="k">type</span> NodeValue = <span class="k">number</span> | <span class="k">string</span> | <span class="k">null</span>;
+
+<span class="k">function</span> sum(n?: TreeNode): <span class="k">number</span> {
+  <span class="k">if</span> (!n) <span class="k">return</span> 0;
+  <span class="k">const</span> own = <span class="k">typeof</span> n.value === <span class="k">"number"</span>
+    ? n.value : 0;  <span class="c">// ข้าม D, F, ว่าง</span>
+  <span class="k">return</span> own + sum(n.left) + sum(n.right);
+}</pre></div>
+      <div><div class="label">แบบ Iterative (BFS)</div>
+<pre><span class="k">let</span> total = 0;
+<span class="k">const</span> queue = [root];
+<span class="k">while</span> (queue.length) {
+  <span class="k">const</span> cur = queue.shift()!; <span class="c">// หยิบตัวหน้าสุดออก</span>
+  <span class="k">if</span> (<span class="k">typeof</span> cur.value === <span class="k">"number"</span>)
+    total += cur.value;
+  <span class="k">if</span> (cur.left) queue.push(cur.left); <span class="c">// ใส่ตัวลูกต่อท้ายคิว</span>
+  <span class="k">if</span> (cur.right) queue.push(cur.right); <span class="c">// ใส่ตัวลูกต่อท้ายคิว</span>
+}</pre></div>
+    </div>
+    <div class="callout">2 + 3 + 4 + 5 + 7 + 9 + 10 = <b>40</b> · Time O(n), Space O(h) · recursion เขียนสั้นกว่า แต่ถ้า tree ลึกมากเสี่ยง stack overflow จึงเลือกแบบ queue ได้</div>
+  </section>
+
+  <!-- ข้อ 5 -->
+  <section class="q" id="q5">
+    <div class="qhead"><span class="qnum">ข้อ 5</span><h2>Design และ Normalization ตารางข้อมูลลูกค้า</h2><span class="qans"><small>คำตอบ</small>6 ตาราง</span></div>
+    <p class="prompt">รหัส, คำนำหน้า, ชื่อ, สกุล, ที่อยู่, บัตร ปชช, เพศ, วันเกิด, ขนาด (S,M,B), เกรด (A–D) และลูกค้าย่อยของลูกค้าหลัก</p>
+    <div class="er-wrap"><svg id="er" viewBox="0 0 900 500" role="img" aria-label="ER Diagram ข้อมูลลูกค้า"></svg></div>
+    <p class="note er-hint">เลื่อนซ้าย–ขวาเพื่อดู diagram ทั้งหมด</p>
+    <div class="nf">
+      <div><b>1NF</b>ทุกช่องเป็นค่าเดียว แยกที่อยู่เป็นบ้านเลขที่/ถนน/ตำบล/อำเภอ/จังหวัด/รหัสไปรษณีย์ และแยกเป็นตาราง เพราะลูกค้า 1 รายมีได้หลายที่อยู่</div>
+      <div><b>2NF</b>ทุกตารางใช้ primary key คอลัมน์เดียว ทุกคอลัมน์จึงขึ้นกับ key ทั้งหมด ไม่มี partial dependency</div>
+      <div><b>3NF</b>คำนำหน้า เพศ ขนาด เกรด แยกเป็น lookup table ไม่เก็บคำอธิบายซ้ำทุกแถว และแก้ได้ในที่เดียว</div>
+    </div>
+    <div class="callout"><b>ลูกค้าหลัก–ลูกค้าย่อย</b> ใช้ self-referencing foreign key <code>parent_customer_id</code> ชี้กลับไปที่ <code>customers.customer_id</code> · ค่า NULL = ลูกค้าหลัก · มี CHECK กันไม่ให้ลูกค้าเป็น parent ของตัวเอง · <code>national_id</code> เป็นข้อมูลส่วนบุคคลตาม PDPA ควรเข้ารหัสและจำกัดสิทธิ์การเข้าถึง</div>
+  </section>
+
+  <!-- ข้อ 6 -->
+  <section class="q" id="q6">
+    <div class="qhead"><span class="qnum">ข้อ 6</span><h2>ค้นหาเฉพาะลูกค้าย่อย และแสดงลูกค้าหลักของแต่ละราย</h2><span class="qans"><small>คำตอบ</small>ใช้ SELF JOIN</span></div>
+    <p class="prompt">SQLite ตัวจริงรันอยู่ในหน้านี้ (sql.js) พร้อมตารางจากข้อ 5 และข้อมูลตัวอย่าง — แก้ query แล้วกด Run ได้ (Ctrl/⌘ + Enter)</p>
+    <textarea id="sql" spellcheck="false" aria-label="SQL query"></textarea>
+    <div class="controls">
+      <button id="sql-run" disabled><svg class="i" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 1.6v8.8a.6.6 0 0 0 .92.5l7-4.4a.6.6 0 0 0 0-1l-7-4.4a.6.6 0 0 0-.92.5z"/></svg>Run SQL</button>
+      <button class="ghost" data-sql="q6">คำตอบข้อ 6</button>
+      <button class="ghost" data-sql="SELECT * FROM customers;">ดูลูกค้าทั้งหมด</button>
+      <span id="sql-status" aria-live="polite">กำลังโหลด SQLite…</span>
+    </div>
+    <div class="table-wrap" id="sql-out"></div>
+    <div class="callout">ใช้ <b>SELF JOIN</b>: เปิดตาราง customers เป็น 2 ชุด <code>c</code> = ลูกค้าย่อย, <code>p</code> = ลูกค้าหลัก · <code>INNER JOIN</code> ทำให้เหลือเฉพาะแถวที่มี parent = ลูกค้าย่อยเท่านั้น → ได้ <b>ลูกค้าย่อย 3 ราย</b> (ลูกค้าหลักที่ parent เป็น NULL ถูกตัดออกเอง)</div>
+  </section>
+
+  <footer>ขอบคุณสำหรับการพิจารณาครับ 🙏 © 2026 Phurich Nilvisut · <a href="https://github.com/phurich-n">GitHub</a></footer>
+</main>
+
+<!-- sql.js WebAssembly (ฝังไว้ในไฟล์ เพื่อให้หน้าเดียวทำงานได้โดยไม่พึ่ง CDN) -->
+<script id="sqljs-wasm" type="application/octet-stream">/*__WASM__*/</script>
+<script>/*__APP__*/</script>
+</body>
+</html>
